@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=3 uid="uid://dt68pxdrodbkw"]
+
+[ext_resource type="Script" path="res://Universe.gd" id="1_b6vjw"]
+[ext_resource type="Texture2D" uid="uid://bdh0q673o0lwq" path="res://teenyred.jpg" id="2_u3ef2"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8k0ta"]
+texture = ExtResource("2_u3ef2")
+texture_region_size = Vector2i(1, 1)
+use_texture_padding = false
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ueimy"]
+tile_size = Vector2i(1, 1)
+sources/0 = SubResource("TileSetAtlasSource_8k0ta")
+
+[node name="Universe" type="Node2D"]
+script = ExtResource("1_b6vjw")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_ueimy")
+cell_quadrant_size = 1
+format = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(82, 47)
+zoom = Vector2(4, 4)
+limit_left = 0
+limit_top = 0
+
+[node name="StepTimer" type="Timer" parent="."]
+wait_time = 0.3
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+modulate = Color(1, 1, 1, 0.313726)
+offset_left = 784.0
+offset_top = 8.0
+offset_right = 1136.0
+offset_bottom = 96.0
+mouse_force_pass_scroll_events = false
+
+[node name="IterationLabel" type="Label" parent="CanvasLayer"]
+offset_left = 993.0
+offset_top = 13.0
+offset_right = 1070.0
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 15
+text = "Iteration #"
+
+[node name="SpeedLabel" type="Label" parent="CanvasLayer"]
+offset_left = 1016.0
+offset_top = 40.0
+offset_right = 1065.0
+offset_bottom = 65.0
+theme_override_font_sizes/font_size = 15
+text = "Speed:"
+
+[node name="BorderButton" type="Button" parent="CanvasLayer"]
+offset_left = 884.0
+offset_top = 16.0
+offset_right = 984.0
+offset_bottom = 47.0
+text = "Cool Border"
+
+[node name="EmptyButton" type="Button" parent="CanvasLayer"]
+offset_left = 884.0
+offset_top = 54.0
+offset_right = 984.0
+offset_bottom = 85.0
+text = "Empty"
+
+[node name="RunButton" type="Button" parent="CanvasLayer"]
+offset_left = 792.0
+offset_top = 16.0
+offset_right = 872.0
+offset_bottom = 88.0
+focus_mode = 1
+mouse_force_pass_scroll_events = false
+text = "Start"
+
+[node name="HSlider" type="HSlider" parent="CanvasLayer"]
+z_index = 10
+offset_left = 1128.0
+offset_top = 80.0
+offset_right = 1264.0
+offset_bottom = 96.0
+rotation = -3.14159
+min_value = 0.1
+max_value = 0.3
+step = 0.05
+value = 0.3
+ticks_on_borders = true
+
+[connection signal="timeout" from="StepTimer" to="." method="_on_step_timer_timeout"]
+[connection signal="mouse_entered" from="CanvasLayer/Panel" to="." method="_on_panel_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Panel" to="." method="_on_panel_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/BorderButton" to="." method="_on_border_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/EmptyButton" to="." method="_on_empty_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/RunButton" to="." method="_on_run_button_pressed"]
+[connection signal="value_changed" from="CanvasLayer/HSlider" to="." method="_on_h_slider_value_changed"]
