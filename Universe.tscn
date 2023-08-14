@@ -1,7 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dt68pxdrodbkw"]
+[gd_scene load_steps=6 format=3 uid="uid://dt68pxdrodbkw"]
 
 [ext_resource type="Script" path="res://Universe.gd" id="1_b6vjw"]
 [ext_resource type="Texture2D" uid="uid://bdh0q673o0lwq" path="res://teenyred.jpg" id="2_u3ef2"]
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_t8j0j"]
+tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 65537, 0, 0, 131073, 0, 0, 65538, 0, 0)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8k0ta"]
 texture = ExtResource("2_u3ef2")
@@ -12,6 +15,7 @@ use_texture_padding = false
 [sub_resource type="TileSet" id="TileSet_ueimy"]
 tile_size = Vector2i(1, 1)
 sources/0 = SubResource("TileSetAtlasSource_8k0ta")
+pattern_0 = SubResource("TileMapPattern_t8j0j")
 
 [node name="Universe" type="Node2D"]
 script = ExtResource("1_b6vjw")
@@ -23,6 +27,7 @@ format = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(82, 47)
+ignore_rotation = false
 zoom = Vector2(4, 4)
 limit_left = 0
 limit_top = 0
@@ -37,7 +42,7 @@ modulate = Color(1, 1, 1, 0.313726)
 offset_left = 784.0
 offset_top = 8.0
 offset_right = 1136.0
-offset_bottom = 96.0
+offset_bottom = 128.0
 mouse_force_pass_scroll_events = false
 
 [node name="IterationLabel" type="Label" parent="CanvasLayer"]
@@ -75,7 +80,6 @@ offset_left = 792.0
 offset_top = 16.0
 offset_right = 872.0
 offset_bottom = 88.0
-focus_mode = 1
 mouse_force_pass_scroll_events = false
 text = "Start"
 
@@ -86,11 +90,77 @@ offset_top = 80.0
 offset_right = 1264.0
 offset_bottom = 96.0
 rotation = -3.14159
-min_value = 0.1
+min_value = 0.025
 max_value = 0.3
-step = 0.05
+step = 0.025
 value = 0.3
 ticks_on_borders = true
+
+[node name="SizeField" type="LineEdit" parent="CanvasLayer"]
+offset_left = 896.0
+offset_top = 96.0
+offset_right = 963.063
+offset_bottom = 127.0
+text = "150"
+alignment = 1
+
+[node name="FPSLabel" type="Label" parent="CanvasLayer"]
+offset_left = 1016.0
+offset_top = 88.0
+offset_right = 1128.0
+offset_bottom = 111.0
+text = "FPS:"
+
+[node name="CamPanel" type="Panel" parent="CanvasLayer"]
+offset_left = 960.0
+offset_top = 136.0
+offset_right = 1136.0
+offset_bottom = 208.0
+
+[node name="CamButton" type="Button" parent="CanvasLayer/CamPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 72.0
+offset_bottom = 64.0
+text = "Take
+Picture"
+
+[node name="FileButton" type="Button" parent="CanvasLayer/CamPanel"]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 8.0
+offset_right = 168.0
+offset_bottom = 64.0
+text = "Open
+Files"
+
+[node name="FileDialog" type="FileDialog" parent="CanvasLayer/CamPanel"]
+title = "Open a File"
+position = Vector2i(500, 194)
+size = Vector2i(392, 300)
+ok_button_text = "Open"
+file_mode = 0
+access = 1
+
+[node name="Panel2" type="Panel" parent="CanvasLayer"]
+visible = false
+z_index = 5
+offset_left = 840.0
+offset_top = 232.0
+offset_right = 1144.0
+offset_bottom = 640.0
+
+[node name="TextEdit" type="TextEdit" parent="CanvasLayer/Panel2"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 296.0
+offset_bottom = 400.0
+editable = false
+
+[node name="IPSTimer" type="Timer" parent="."]
+autostart = true
 
 [connection signal="timeout" from="StepTimer" to="." method="_on_step_timer_timeout"]
 [connection signal="mouse_entered" from="CanvasLayer/Panel" to="." method="_on_panel_mouse_entered"]
@@ -99,3 +169,8 @@ ticks_on_borders = true
 [connection signal="pressed" from="CanvasLayer/EmptyButton" to="." method="_on_empty_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/RunButton" to="." method="_on_run_button_pressed"]
 [connection signal="value_changed" from="CanvasLayer/HSlider" to="." method="_on_h_slider_value_changed"]
+[connection signal="text_submitted" from="CanvasLayer/SizeField" to="." method="_on_size_field_text_submitted"]
+[connection signal="pressed" from="CanvasLayer/CamPanel/CamButton" to="." method="_on_cam_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/CamPanel/FileButton" to="." method="_on_file_button_pressed"]
+[connection signal="confirmed" from="CanvasLayer/CamPanel/FileDialog" to="." method="_on_file_dialog_confirmed"]
+[connection signal="timeout" from="IPSTimer" to="." method="_on_ips_timer_timeout"]
